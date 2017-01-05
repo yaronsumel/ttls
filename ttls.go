@@ -12,7 +12,7 @@ import (
 )
 
 type TTLS struct {
-	Listener *net.Listener
+	Listener net.Listener
 	x509Opts *x509Opts
 }
 
