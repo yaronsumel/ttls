@@ -23,8 +23,10 @@ type x509Opts struct {
 	Organization *string
 }
 
-func NewTTLSListener(laddr string) (*TTLS, error) {
-	t := TTLS{}
+func NewTTLSListener(laddr string, x509Opts *x509Opts) (*TTLS, error) {
+	t := TTLS{
+		x509Opts:x509Opts,
+	}
 	listener, err := tls.Listen("tcp", laddr, t.getConfig())
 	if err != nil {
 		return t, err
