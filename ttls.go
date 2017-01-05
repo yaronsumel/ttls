@@ -94,7 +94,11 @@ func (t *TTLS)getX509Template() (*x509.Certificate, error) {
 	}
 
 	if t.x509Opts.SerialNumber != "" {
-		crt.SerialNumber = big.NewInt(int64(t.x509Opts.SerialNumber))
+		serial, err := strconv.Atoi(t.x509Opts.SerialNumber)
+		if err != nil {
+			return crt, nil
+		}
+		crt.SerialNumber = big.NewInt(int64(serial))
 	}
 
 	if t.x509Opts.Country != "" {
