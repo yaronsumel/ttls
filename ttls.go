@@ -27,15 +27,15 @@ func NewTTLSListener(laddr string, x509Opts *x509Opts) (*TTLS, error) {
 	t := TTLS{
 		x509Opts:x509Opts,
 	}
-	listener, err := tls.Listen("tcp", laddr, t.getConfig())
+	listener, err := tls.Listen("tcp", laddr, *t.getConfig())
 	if err != nil {
-		return t, err
+		return &t, err
 	}
 	t.Listener = listener
-	return &t
+	return &t, nil
 }
 
-func (t *TTLS)getConfig() tls.Config {
+func (t *TTLS)getConfig() *tls.Config {
 	config := &tls.Config{
 		PreferServerCipherSuites: true,
 		MinVersion: tls.VersionTLS12,
@@ -45,20 +45,18 @@ func (t *TTLS)getConfig() tls.Config {
 	return config
 }
 
-func (t *TTLS)getCertificates() []tls.Certificate {
+func (t *TTLS)getCertificates() ([]tls.Certificate, error) {
 	x509Cert, privateKey, err := t.getX509Certificate()
 	if err != nil {
 		return []tls.Certificate{}, err
 	}
 	return []tls.Certificate{
-		&tls.Certificate{
-			Certificate:[][]byte{x509Cert},
-			PrivateKey:privateKey,
-		},
+		Certificate:[][]byte{x509Cert},
+		PrivateKey:privateKey,
 	}, nil
 }
 
-func (t *TTLS)getPrivateKey() (rsa.PrivateKey, error) {
+func (t *TTLS)getPrivateKey() (*rsa.PrivateKey, error) {
 	return rsa.GenerateKey(rand.Reader, 2048)
 }
 
@@ -81,19 +79,19 @@ func (t *TTLS)getX509Template() *x509.Certificate {
 	}
 
 	if t.x509Opts.SubjectKeyId != nil {
-		crt.SubjectKeyId = t.x509Opts.SubjectKeyId
+		crt.SubjectKeyId = *t.x509Opts.SubjectKeyId
 	}
 
 	if t.x509Opts.SerialNumber != nil {
-		crt.SerialNumber = t.x509Opts.SerialNumber
+		crt.SerialNumber = *t.x509Opts.SerialNumber
 	}
 
 	if t.x509Opts.Country != nil {
-		crt.Subject.Country = t.x509Opts.Country
+		crt.Subject.Country = *t.x509Opts.Country
 	}
 
 	if t.x509Opts.Organization != nil {
-		crt.Subject.Organization = t.x509Opts.Organization
+		crt.Subject.Organization = *t.x509Opts.Organization
 	}
 
 	return crt
