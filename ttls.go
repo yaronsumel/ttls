@@ -14,17 +14,17 @@ import (
 
 type TTLS struct {
 	Listener net.Listener
-	x509Opts *x509Opts
+	x509Opts *X509Opts
 }
 
-type x509Opts struct {
+type X509Opts struct {
 	SubjectKeyId string
 	SerialNumber string
 	Country      string
 	Organization string
 }
 
-func NewTTLSListener(laddr string, x509Opts *x509Opts) (*TTLS, error) {
+func NewTTLSListener(laddr string, x509Opts *X509Opts) (*TTLS, error) {
 	t := TTLS{
 		x509Opts:x509Opts,
 	}
