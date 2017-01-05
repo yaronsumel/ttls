@@ -1,4 +1,4 @@
-# ttls
+# ttls[![Go Report Card](https://goreportcard.com/badge/github.com/yaronsumel/ttls)](https://goreportcard.com/report/github.com/yaronsumel/ttls)
 small lib thats creating temporary TLS listener with random server certificate.
 
 why temporary ?
