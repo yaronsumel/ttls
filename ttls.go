@@ -97,6 +97,10 @@ func (t *TTLS) getX509Template() (*x509.Certificate, error) {
 		KeyUsage:    x509.KeyUsageDigitalSignature | x509.KeyUsageCertSign,
 	}
 
+	if t.x509Opts == nil {
+		return crt, nil
+	}
+
 	if t.x509Opts.SubjectKeyID != "" {
 		crt.SubjectKeyId = []byte(t.x509Opts.SubjectKeyID)
 	}
