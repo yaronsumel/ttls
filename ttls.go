@@ -9,7 +9,7 @@ import (
 	"time"
 	"crypto/rand"
 	"net"
-	"strconv"
+	mrand "math/rand"
 )
 
 type TTLS struct {
@@ -19,7 +19,7 @@ type TTLS struct {
 
 type X509Opts struct {
 	SubjectKeyId string
-	SerialNumber string
+	SerialNumber int64
 	Country      string
 	Organization string
 }
@@ -71,13 +71,18 @@ func (t *TTLS)getPrivateKey() (*rsa.PrivateKey, error) {
 	return rsa.GenerateKey(rand.Reader, 2048)
 }
 
+func getRandInt64() int64 {
+	r := mrand.New(mrand.NewSource(time.Now().UnixNano()))
+	return int64(r.Int())
+}
+
 func (t *TTLS)getX509Template() (*x509.Certificate, error) {
 
 	crt := &x509.Certificate{
 		IsCA : true,
 		BasicConstraintsValid : true,
 		SubjectKeyId : []byte("TTLS"),
-		SerialNumber : big.NewInt(1234),
+		SerialNumber : big.NewInt(getRandInt64()),
 		Subject : pkix.Name{
 			Country : []string{"US"},
 			Organization: []string{"World Wide Web"},
@@ -93,12 +98,8 @@ func (t *TTLS)getX509Template() (*x509.Certificate, error) {
 		crt.SubjectKeyId = []byte(t.x509Opts.SubjectKeyId)
 	}
 
-	if t.x509Opts.SerialNumber != "" {
-		serial, err := strconv.Atoi(t.x509Opts.SerialNumber)
-		if err != nil {
-			return crt, err
-		}
-		crt.SerialNumber = big.NewInt(int64(serial))
+	if t.x509Opts.SerialNumber != 0 {
+		crt.SerialNumber = big.NewInt(t.x509Opts.SerialNumber)
 	}
 
 	if t.x509Opts.Country != "" {
