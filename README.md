@@ -6,6 +6,11 @@ every time that `NewTTLSListener` get called , new TLS certificates will be crea
 
 WARNING - Do Not Use For any project that requires MITM protection, more useful for some temporary cases with local AUTH.. 
 
+## Installation
+``` 
+$ go get -u github.com/yaronsumel/ttls 
+```
+
 ## Usage 
 
 create the TLS Listener with Min effort
