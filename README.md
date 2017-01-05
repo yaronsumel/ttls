@@ -23,7 +23,7 @@ or customize the x509 certificate as you wish
 		Country:"US",
 		Organization:"GITHUB",
 		SerialNumber:12345,
-		SubjectKeyId:"somekeyid",
+		SubjectKeyID:"somekeyid",
 	})
 ```
 
