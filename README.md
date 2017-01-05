@@ -4,7 +4,7 @@ small lib thats creating temporary TLS listener with random server certificate.
 why temporary ?
 every time that `NewTTLSListener` get called , new TLS certificates will be created.
 
-WARNING - Do Not Use For any project that requires MITM protection, more useful for some temporary cases with local AUTH.. 
+WARNING - Do Not Use For any project that requires MITM protection, more useful for some temporary use cases with local AUTH.. 
 
 ## Installation
 ``` 
